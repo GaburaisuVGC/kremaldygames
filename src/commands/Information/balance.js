@@ -23,7 +23,8 @@ module.exports = {
                 .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`)
                 .addFields(
                     {name: 'Username', value: `${member}`, inline: true},
-                    {name: 'Balance', value: `${balanceProfile.amount} Kremaldy Coins`, inline: true}
+                    {name: 'Balance', value: `${balanceProfile.amount} Kremaldy Coins`, inline: true},
+                    {name: 'Tresor', value: `${balanceProfile.tresor} Trésors`, inline: true}
                 )
                 .setTimestamp()
                 .setColor("GOLD")

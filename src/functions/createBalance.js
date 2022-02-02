@@ -10,6 +10,7 @@ module.exports = (client) => {
             balanceProfile = await new Balance({
                 _id: mongoose.Types.ObjectId(),
                 memberId: member.id,
+                tresor: 0,
             });
             await balanceProfile.save().catch(err => console.log(err));
             return balanceProfile;

@@ -11,7 +11,8 @@ module.exports = (client) => {
                 niveau: "LÉGENDAIRE",
                 text: "Modifiez cette carte dans votre base de données.",
                 amount: 0,
-                image: ""
+                image: "",
+                hasTresor: false,
             });
             await cardProfile.save().catch(err => console.log(err));
             return cardProfile;

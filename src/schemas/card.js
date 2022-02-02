@@ -6,7 +6,8 @@ const cardSchema = new mongoose.Schema({
     niveau: String,
     text: String,
     amount: Number,
-    image: { type: String, required: false}
+    image: { type: String, required: false},
+    hasTresor: Boolean,
 });
 
 module.exports = mongoose.model('Card', cardSchema, 'cards');
