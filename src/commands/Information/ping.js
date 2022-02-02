@@ -10,5 +10,7 @@ module.exports = {
         const message = await interaction.fetchReply();
 
         return interaction.editReply(`Le message a mis ${message.createdTimestamp - interaction.createdTimestamp} ms pour me parvenir et te revenir.\nTon ping est de ${interaction.client.ws.ping} ms.`);
+        
+        
     }
 }
