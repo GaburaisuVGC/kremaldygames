@@ -7,8 +7,10 @@ module.exports = (client) => {
             cardProfile = await new Card({
                 _id: mongoose.Types.ObjectId(),
                 title: "Card Title",
-                niveau: "",
+                rand: 0,
+                niveau: "LÉGENDAIRE",
                 text: "Modifiez cette carte dans votre base de données.",
+                amount: 0,
                 image: ""
             });
             await cardProfile.save().catch(err => console.log(err));
