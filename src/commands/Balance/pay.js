@@ -25,8 +25,8 @@ module.exports = {
     let targetBalanceProfile = await Balance.findOne({ memberId: target })
     
 
-    console.log(balanceProfile);
-    console.log(targetBalanceProfile);
+    // console.log(balanceProfile);
+    // console.log(targetBalanceProfile);
 
     if (transferAmount > balanceProfile.amount)
       return interaction.reply(
