@@ -7,11 +7,11 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('balance')
         .setDescription('Returns balance')
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName("user")
-                .setDescription("Gets information of a user mentionned")
-                .addUserOption(option => option.setName("target").setDescription("The user mentionned"))),
+        // .addSubcommand(subcommand =>
+        //     subcommand
+        //         .setName("user")
+        //         .setDescription("Gets information of a user mentionned"))
+        .addUserOption(option => option.setName("target").setDescription("The user mentionned")),
     async execute (interaction, client){
         const user = (interaction.options.getUser("target") ? interaction.options.getUser("target") : interaction.user );
         let member = interaction.guild.members.cache.get(user.id);
@@ -23,8 +23,8 @@ module.exports = {
                 .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`)
                 .addFields(
                     {name: 'Username', value: `${member}`, inline: true},
-                    {name: 'Balance', value: `${balanceProfile.amount} Kremaldy Coins`, inline: true},
-                    {name: 'Tresor', value: `${balanceProfile.tresor} Trésors`, inline: true}
+                    {name: 'Balance', value: `${balanceProfile.amount}KC`, inline: true},
+                    {name: 'Trésors', value: `${balanceProfile.tresor} Trésors`, inline: true}
                 )
                 .setTimestamp()
                 .setColor("GOLD")
