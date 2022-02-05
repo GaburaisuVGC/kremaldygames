@@ -1,9 +1,13 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { InteractionResponseType } = require('discord-api-types/v9');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
+
 const Card = require('../../schemas/card');
-const Balance = require('../../schemas/balance');
+const User = require('../../schemas/user');
 const Tresor = require('../../schemas/tresor');
+const Perso = require('../../schemas/perso');
+
+
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -33,70 +37,101 @@ module.exports = {
             "LÉGENDAIRE" : "ORANGE"
         }
 
-        const user = interaction.user.id;
-        const userBalance = await Balance.findOne({ memberId: user });
+        const userId = interaction.user.id;
+        const userBalance = await User.findOne({ memberId: userId });
+        // console.log(userBalance.amount);
         const userCoin = userBalance.amount;
 
         // console.log(userCoin); -- Solde de l'utilisateur de la commande avant le roll, pour savoir si il peut lancer le roll
-        if (userCoin < 1) {
+        if (userCoin < 100) {
             interaction.reply('Vous n\'avez pas assez de pièces !');
             return;
         } 
         else {
-        const rnd = Math.random() * 1000000; // Changer ici pour augmenter les probas
+            const rnd = Math.random() * 1000000; // Changer ici pour augmenter les probas
 
-        const percent = rnd / 1000;
-        let result = null, acc = 0;
+            const percent = rnd / 1000;
+            let result = null, acc = 0;
 
-        Object.keys(rarity).forEach(key => {
-            if (result === null && percent > 100 - rarity[key] - acc)
-              result = key;
-            acc += parseFloat(rarity[key]);
-          });
+            Object.keys(rarity).forEach(key => {
+                if (result === null && percent > 100 - rarity[key] - acc)
+                result = key;
+                acc += parseFloat(rarity[key]);
+            });
 
-        // console.log(percent + "%", result); -- Proba executée
-        
-        const toObject = true;
-        const card = await Card.find({ niveau: result }, null, {lean: toObject});
+            // console.log(percent + "%", result); -- Proba executée
+            
+            const toObject = true;
+            const card = await Card.find({ niveau: result }, null, {lean: toObject});
 
-        const cardCount = await Card.count({ niveau: result });
-        const randID = Math.floor(Math.random() * cardCount);
-        
-        // console.log(randID); -- Quelle carte a été tirée ?
-        
-        let rollProfile = await Card.findOne({ _id: JSON.parse(JSON.stringify(card[`${randID}`]._id))});
+            const cardCount = await Card.count({ niveau: result });
+            const randID = Math.floor(Math.random() * cardCount);
+            
+            // console.log(randID); -- Quelle carte a été tirée ?
+            
+            let rollProfile = await Card.findOne({ _id: JSON.parse(JSON.stringify(card[`${randID}`]._id))});
 
-        /** Envoi d'embed */
-        
-        const userEmbed = new MessageEmbed()
-                .setTitle(`${rollProfile.title}`)
-                .addFields(
-                    {name: `${rollProfile.niveau}`, value: `${rollProfile.text}`},
-                )
-                .setTimestamp()
-                .setColor(`${colors[result]}`)
-                .setFooter({text: interaction.user.tag, 
-                            iconURL: interaction.user.displayAvatarURL()});
-                await interaction.reply({ embeds: [userEmbed] });
-        await interaction.editReply(userEmbed);
+            /** Envoi d'embed */
+            
+            const userEmbed = new MessageEmbed()
+                    .setTitle(`${rollProfile.title}`)
+                    .addFields(
+                        {name: `${rollProfile.niveau}`, value: `${rollProfile.text}`},
+                    )
+                    .setTimestamp()
+                    .setColor(`${colors[result]}`)
+                    .setFooter({text: interaction.user.tag, 
+                                iconURL: interaction.user.displayAvatarURL()});
+                    await interaction.reply({ embeds: [userEmbed] });
+            await interaction.editReply(userEmbed);
 
-        if (rollProfile.amount != 0) {
-            await Balance.updateOne({ memberId: user }, { $inc: {amount: rollProfile.amount}});
-        }
-
-        if (rollProfile.hasTresor = true) {
-            const tresorCard = await Tresor.find({}, null, {lean: toObject});
-            const tresorCount = await Tresor.count();
-            const randTresorID = Math.floor(Math.random() * tresorCount);
-            const userId = interaction.user.id;
-            const userTresor = await Balance.findOne({ memberId: userId });
-            const userTresorAmount = userTresor.tresor;
-
-            let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
-            await interaction.followUp('Vous avez trouvé un trésor ! ' + rollTresor.title);
-            await Balance.updateOne({ memberId: userId }, { $inc: {tresor: 1}});
+            if (rollProfile.amount != 0) {
+                await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.amount}});
             }
-        }
-        
+
+            if (rollProfile.hasTresor = true) {
+                const tresorCard = await Tresor.find({}, null, {lean: toObject});
+                const tresorCount = await Tresor.count();
+                const randTresorID = Math.floor(Math.random() * tresorCount);
+                const userId = interaction.user.id;
+                const userTresor = await User.findOne({ memberId: userId });
+                const userTresorAmount = userTresor.tresor;
+
+                let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
+                const imageTresor = new MessageAttachment(`./src/images/tresor/${rollTresor._id}.png`);
+                const userEmbedTresor = new MessageEmbed()
+                    .setTitle("Vous avez trouvé un trésor !")
+                    .setColor("BLUE")
+                    .setFooter({text: rollTresor.title, 
+                                iconURL: `attachment://${rollTresor._id}.png` 
+                            });
+                    await interaction.followUp({ embeds: [userEmbedTresor], files: [imageTresor] });
+                    await interaction.editReply(userEmbedTresor);
+                await User.updateOne({ memberId: userId }, { $inc: {tresor: 1}});
+                }
+
+            
+            if (rollProfile.hasPersonnage != "") {
+                const persoCard = await Perso.findOne({ _id: rollProfile.hasPersonnage }, null, {lean: toObject});
+                if (persoCard.masterId == "") {
+                    await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { belongsToSomeone: true, masterId: userId });
+                    await User.updateOne({ memberId: userId }, { $inc: {perso: 1}});
+                    await User.updateOne({ memberId: userId }, { $addToSet : { persosList: rollProfile.hasPersonnage }});
+                    const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard._id}.png`);
+                    const userEmbedPerso = new MessageEmbed()
+                    .setTitle("Vous avez trouvé un personnage !")
+                    .setColor("LUMINOUS_VIVID_PINK")
+                    .setImage(`attachment://${persoCard._id}.png`)
+                    .addFields(
+                        {name: `${persoCard.name}`, value: `${persoCard.description}`, inline: true},
+                    )
+                    await interaction.followUp({ embeds: [userEmbedPerso], files: [imagePerso] });
+                    await interaction.editReply(userEmbedPerso);
+                } else if (persoCard.masterId != "") {
+                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage !`); // 
+                }
+            }
+            
+        } 
     },
-};
+}

@@ -10,7 +10,7 @@ module.exports = (client) => {
                 rand: 0,
                 niveau: "LÉGENDAIRE",
                 text: "Modifiez cette carte dans votre base de données.",
-                amount: 0,
+                amount: -100,
                 image: "",
                 hasTresor: false,
             });

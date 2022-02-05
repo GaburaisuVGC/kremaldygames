@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { InteractionResponseType } = require("discord-api-types/v9");
 const { MessageEmbed, MessageAttachment } = require("discord.js");
-const Balance = require("../../schemas/balance");
+const User = require("../../schemas/user");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,31 +16,27 @@ module.exports = {
   async execute(interaction, client) {
     const user = interaction.user.id;
 
-    let balanceProfile = await Balance.findOne({ memberId: user });
+    let userProfile = await User.findOne({ memberId: user });
     
 
     const transferAmount = interaction.options.getInteger("amount");
     const transferTarget = interaction.options.getUser("target");
     const target = transferTarget.id
-    let targetBalanceProfile = await Balance.findOne({ memberId: target })
-    
+    let targetUserProfile = await User.findOne({ memberId: target })
 
-    // console.log(balanceProfile);
-    // console.log(targetBalanceProfile);
-
-    if (transferAmount > balanceProfile.amount)
+    if (transferAmount > userProfile.amount)
       return interaction.reply(
-        `Sorry ${interaction.user}, you only have ${balanceProfile.amount}.`
+        `Sorry ${interaction.user}, you only have ${userProfile.amount}.`
       );
     if (transferAmount <= 0)
       return interaction.reply(
         `Please enter an amount greater than zero, ${interaction.user}.`
       );
 
-    await Balance.findOneAndUpdate({ memberId: interaction.user.id}, { amount: balanceProfile.amount - transferAmount});
-    await Balance.findOneAndUpdate({ memberId: target}, { amount: targetBalanceProfile.amount += transferAmount});
+    await User.findOneAndUpdate({ memberId: interaction.user.id}, { amount: userProfile.amount - transferAmount});
+    await User.findOneAndUpdate({ memberId: target}, { amount: targetUserProfile.amount += transferAmount});
 
-    const newBalanceProfile = await Balance.findOne({ memberId: user });
+    const newUserProfile = await User.findOne({ memberId: user });
 
     const userEmbed = new MessageEmbed()
       .setTitle(`Payment successful`)
@@ -53,7 +49,7 @@ module.exports = {
         },
         {
           name: "Your balance amount",
-          value: `${balanceProfile.amount}KC -> ${newBalanceProfile.amount}KC`,
+          value: `${userProfile.amount}KC -> ${newUserProfile.amount}KC`,
         }
       )
       .setTimestamp()

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { InteractionResponseType } = require('discord-api-types/v9');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
-const Balance = require('../../schemas/balance');
+const User = require('../../schemas/user');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,15 +16,15 @@ module.exports = {
         const user = (interaction.options.getUser("target") ? interaction.options.getUser("target") : interaction.user );
         let member = interaction.guild.members.cache.get(user.id);
         let avatar = interaction.guild.members.cache.get(user.avatar);
-        const balanceProfile = await client.createBalance(member);
+        const userProfile = await client.createUser(member);
 
         const userEmbed = new MessageEmbed()
                 .setTitle(`${user.username}'s balance:`)
                 .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`)
                 .addFields(
                     {name: 'Username', value: `${member}`, inline: true},
-                    {name: 'Balance', value: `${balanceProfile.amount}KC`, inline: true},
-                    {name: 'Trésors', value: `${balanceProfile.tresor} Trésors`, inline: true}
+                    {name: 'Balance', value: `${userProfile.amount}KC`, inline: true},
+                    {name: 'Trésors', value: `${userProfile.tresor} Trésors`, inline: true}
                 )
                 .setTimestamp()
                 .setColor("GOLD")

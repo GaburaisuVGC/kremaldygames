@@ -8,6 +8,7 @@ const cardSchema = new mongoose.Schema({
     amount: Number,
     image: { type: String, required: false},
     hasTresor: Boolean,
+    hasPersonnage: String,
 });
 
 module.exports = mongoose.model('Card', cardSchema, 'cards');
