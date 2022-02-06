@@ -11,6 +11,8 @@ module.exports = (client) => {
                 _id: mongoose.Types.ObjectId(),
                 memberId: member.id,
                 tresor: 0,
+                freerolls: 0,
+                onCooldown: false
             });
             await userProfile.save().catch(err => console.log(err));
             return userProfile;

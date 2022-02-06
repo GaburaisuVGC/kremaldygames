@@ -13,7 +13,6 @@ const commandFolders = fs.readdirSync('./src/commands');
 
 
 
-
 (async () => {
     for (file of functions) {
         require(`./functions/${file}`)(client);

@@ -9,7 +9,7 @@ module.exports = (client) => {
                 title: "Tresor Title",
                 description: "Modifiez ce trésor dans votre base de données.",
                 image: "",
-                prix: 0,
+                rolls: 0,
             });
             await tresorProfile.save().catch(err => console.log(err));
             return tresorProfile;
