@@ -8,9 +8,10 @@ module.exports = (client) => {
                 _id: mongoose.Types.ObjectId(),
                 name: "Perso Name",
                 description: "Modifiez ce personnage dans votre base de données.",
-                image: "insert image link here",
-                value: 0,
+                image: "à modifier",
+                value: 10000,
                 masterId: "",
+                onSale: 1,
             });
             await persoProfile.save().catch(err => console.log(err));
             return persoProfile;

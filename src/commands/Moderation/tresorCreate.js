@@ -6,7 +6,7 @@ const Tresor = require("../../schemas/tresor");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("tresorcreate")
-    .setDescription("Crée un trésor"),
+    .setDescription("Crée un trésor."),
   async execute(interaction, client) {
     if (interaction.user.id == "414311854614118401") {
       const tresorProfile = await client.createTresor();
@@ -15,7 +15,7 @@ module.exports = {
         .setTitle(`Trésor créé`)
         .addFields({
           name: `Création de Trésor`,
-          value: `Un trésor a été ajouté dans votre base de données`,
+          value: `Un trésor a été ajouté dans votre base de données.`,
         })
         .setTimestamp()
         .setColor("BLUE")
@@ -25,9 +25,9 @@ module.exports = {
         });
       await interaction.reply({ embeds: [userEmbed] });
       await interaction.editReply(userEmbed);
-    } else {
+    } else if (interaction.user.id != "414311854614118401") {
       await interaction.reply({
-        content: "T'as pas le droit.",
+        content: "Cette commande est exclusive au créateur du bot.",
         ephemeral: true,
       });
     }

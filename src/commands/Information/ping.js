@@ -3,9 +3,9 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')
-        .setDescription('Renvoie le nombre de ping'),
+        .setDescription('Renvoie le ping.'),
     async execute(interaction) {
-        await interaction.reply('Ratio.');
+        await interaction.reply('...');
 
         const message = await interaction.fetchReply();
 

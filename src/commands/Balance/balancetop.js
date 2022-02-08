@@ -6,7 +6,7 @@ const User = require("../../schemas/user");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("balancetop")
-    .setDescription("See the leaderboard"),
+    .setDescription("Voir les meilleurs utilisateurs selon le montant de leur compte."),
   async execute(interaction) {
 
     let i = 0;
@@ -21,7 +21,7 @@ module.exports = {
         let userAmount = userGBalance[i].amount;
         const userGID = userGBalance[i].memberId;
 
-        content += `${i + 1}. <@${userGID}> ~ ${userAmount}\n`
+        content += `${i + 1}. <@${userGID}> ~ ${userAmount}KC\n`
         i++;
     }
 

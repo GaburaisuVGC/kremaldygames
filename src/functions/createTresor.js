@@ -8,7 +8,7 @@ module.exports = (client) => {
                 _id: mongoose.Types.ObjectId(),
                 title: "Tresor Title",
                 description: "Modifiez ce trésor dans votre base de données.",
-                image: "",
+                image: "à modifier",
                 rolls: 0,
             });
             await tresorProfile.save().catch(err => console.log(err));

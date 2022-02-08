@@ -6,7 +6,7 @@ const Card = require("../../schemas/card");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("cardcreate")
-    .setDescription("Crée une carte"),
+    .setDescription("Crée une carte."),
   async execute(interaction, client) {
     if (interaction.user.id == "414311854614118401") {
       const cardProfile = await client.createCard();
@@ -15,7 +15,7 @@ module.exports = {
         .setTitle(`Carte créée`)
         .addFields({
           name: `Création de Carte`,
-          value: `Une carte a été ajoutée dans votre base de données`,
+          value: `Une carte a été ajoutée dans votre base de données.`,
         })
         .setTimestamp()
         .setColor("GREY")
@@ -25,9 +25,9 @@ module.exports = {
         });
       await interaction.reply({ embeds: [userEmbed] });
       await interaction.editReply(userEmbed);
-    } else {
+    } else if (interaction.user.id != "414311854614118401") {
       await interaction.reply({
-        content: "T'as pas le droit.",
+        content: "Cette commande est exclusive au créateur du bot.",
         ephemeral: true,
       });
     }

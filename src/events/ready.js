@@ -4,8 +4,8 @@ module.exports = {
     async execute(client) {
 
 
-        console.log('Ready !');
+        console.log('Kremaldy Games est prêt.');
 
-        client.user.setPresence({activities: [{name: `some games`, type: `PLAYING`}], status: 'online'});
+        client.user.setPresence({activities: [{name: `some games to fill my Greed`, type: `PLAYING`}], status: 'online'});
     },
 };

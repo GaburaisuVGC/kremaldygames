@@ -6,6 +6,8 @@ TO-DO LIST
 # = A prévoir
 ```
 ```diff
+
+- (EN DERNIER) Rendre le bot global. (Problème avec le handleCommands.js qui nécessite un GuildId, actuellement celui du serveur KremaldyGamestest. Quand le bot est mis sur un autre serveur, les commandes ne fonctionnent pas.)
 + Balance :
 + Commandes :
 +   - balancetop
@@ -28,12 +30,11 @@ TO-DO LIST
 +   Code :
 +       -un certain personnage doit être obtenu selon une certaine carte
 +       -la carte peut-être tirée à nouveau mais offrira une compensation si (belongsToSomeone du personnage == true)
--   Commandes :
--       -buy <personnage.title> <monnaie> (envoie une demande d'achat à l'utilisateur, mettre un timer pour attendre sa réponse, si le personnage n'a pas de maitre, achète le personnage immédiatement avec sa valeur de base)
--       -acceptbuy (transfert argent et personnage, seulement possible par celui qui possède le perso)
--       -refusebuy (refuse le transfert, seulement possible par celui qui possède le perso)
--       -setvalue (modifie la valeur du personnage, seulement possible par celui qui possède le perso)
--       -view personnage <personnage.slug>
++   Commandes :
++       -buy <personnage.name> <monnaie>
++       -onsale <personnage.name>
++       -setvalue (modifie la valeur du personnage, seulement possible par celui qui possède le perso)
++       -view personnage <personnage.name>
 -       -view personnages <user.username> (pour voir les personnages d'une personne)
 + Cartes:
 +   BDD/Code:

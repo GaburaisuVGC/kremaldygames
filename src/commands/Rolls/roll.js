@@ -13,10 +13,8 @@ const mongoose = require('mongoose');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('roll')
-        .setDescription('Tire une carte'),
+        .setDescription('Tire une carte.'),
     async execute (interaction, client){
-        
-        // TODO : Ajouter les persos + trésors selon les cartes
 
 
         /** Récupération de la carte  */
@@ -36,14 +34,19 @@ module.exports = {
             "ULTRA RARE" : "RED",
             "LÉGENDAIRE" : "PURPLE"
         }
+        
 
         const userId = interaction.user.id;
+        // Si l'user n'a pas de profil dans la DDB :
         const userBalance = await User.findOne({ memberId: userId });
-        // console.log(userBalance.amount);
+        const exists = await User.findOne({ memberId: userId});
+        let member = interaction.guild.members.cache.get(userId);
+        if (exists) {
+
         const userCoin = userBalance.amount;
         if (userBalance.freerolls < 1) {
             if (userBalance.onCooldown == true) {
-                await interaction.reply('On cooldown restriction.');
+                await interaction.reply("Vous êtes en cooldown.");
             } else {
         // console.log(userCoin); -- Solde de l'utilisateur de la commande avant le roll, pour savoir si il peut lancer le roll
         if (userCoin < 100) {
@@ -132,7 +135,7 @@ module.exports = {
             if (rollProfile.hasPersonnage != "") {
                 const persoCard = await Perso.findOne({ _id: rollProfile.hasPersonnage }, null, {lean: toObject});
                 if (persoCard.masterId == "") {
-                    await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { belongsToSomeone: true, masterId: userId });
+                    await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { masterId: userId, onSale: 0 });
                     await User.updateOne({ memberId: userId }, { $inc: {perso: 1}});
                     await User.updateOne({ memberId: userId }, { $addToSet : { persosList: rollProfile.hasPersonnage }});
                     const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
@@ -146,7 +149,11 @@ module.exports = {
                     await interaction.followUp({ embeds: [userEmbedPerso], files: [imagePerso] });
                     await interaction.editReply(userEmbedPerso);
                 } else if (persoCard.masterId != "") {
-                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage !`); // 
+                    if (rollProfile.compensation != 0) {
+                        await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.compensation}});
+                    }
+                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage ! Vous recevez une compensation de ${rollProfile.compensation}KC.`); // 
+                    
                 }
             }
             await User.updateOne({ memberId: userId }, { onCooldown: true });
@@ -243,7 +250,7 @@ module.exports = {
             if (rollProfile.hasPersonnage != "") {
                 const persoCard = await Perso.findOne({ _id: rollProfile.hasPersonnage }, null, {lean: toObject});
                 if (persoCard.masterId == "") {
-                    await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { belongsToSomeone: true, masterId: userId });
+                    await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { masterId: userId, onSale: 0 });
                     await User.updateOne({ memberId: userId }, { $inc: {perso: 1}});
                     await User.updateOne({ memberId: userId }, { $addToSet : { persosList: rollProfile.hasPersonnage }});
                     const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
@@ -257,13 +264,20 @@ module.exports = {
                     await interaction.followUp({ embeds: [userEmbedPerso], files: [imagePerso] });
                     await interaction.editReply(userEmbedPerso);
                 } else if (persoCard.masterId != "") {
-                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage !`); // 
+                    if (rollProfile.compensation != 0) {
+                        await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.compensation}});
+                    }
+                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage ! Vous recevez une compensation de ${rollProfile.compensation}KC.`); // 
+                    
                 }
             }
             await User.updateOne({ memberId: userId }, { freerolls: userBalance.freerolls - 1 });
             
         } 
         }
-
+    } else if (!exists) {
+        await client.createUser(member);
+        await interaction.reply("Vous n'aviez pas de compte Kremaldy Games, nous vous en avons créé un. Veuillez réessayer votre commande.");
+    }
     },
 }

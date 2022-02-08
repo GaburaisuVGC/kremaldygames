@@ -5,8 +5,8 @@ const persoSchema = new mongoose.Schema({
     description: { type: String, required: true},
     image: { type: String, required: true},
     value: Number,
-    belongsToSomeone: { type: Boolean, default: false},
     masterId: {type: String, required: false},
+    onSale: Number,
 });
 
 module.exports = mongoose.model('Perso', persoSchema, 'persos');

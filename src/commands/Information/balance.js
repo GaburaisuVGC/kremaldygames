@@ -6,12 +6,8 @@ const User = require('../../schemas/user');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('balance')
-        .setDescription('Returns balance')
-        // .addSubcommand(subcommand =>
-        //     subcommand
-        //         .setName("user")
-        //         .setDescription("Gets information of a user mentionned"))
-        .addUserOption(option => option.setName("target").setDescription("The user mentionned")),
+        .setDescription("Montre le compte d'un utilisateur.")
+        .addUserOption(option => option.setName("target").setDescription("L'utilisateur mentionné.")),
     async execute (interaction, client){
         const user = (interaction.options.getUser("target") ? interaction.options.getUser("target") : interaction.user );
         let member = interaction.guild.members.cache.get(user.id);
@@ -19,11 +15,11 @@ module.exports = {
         const userProfile = await client.createUser(member);
 
         const userEmbed = new MessageEmbed()
-                .setTitle(`${user.username}'s balance:`)
+                .setTitle(`Compte de ${user.username}`)
                 .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`)
                 .addFields(
-                    {name: 'Username', value: `${member}`, inline: true},
-                    {name: 'Balance', value: `${userProfile.amount}KC`, inline: true},
+                    {name: 'Pseudo', value: `${member}`, inline: true},
+                    {name: 'Solde', value: `${userProfile.amount}KC`, inline: true},
                     {name: 'Trésors', value: `${userProfile.tresor} Trésors`, inline: true}
                 )
                 .setTimestamp()
