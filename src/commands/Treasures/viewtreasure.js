@@ -27,7 +27,23 @@ module.exports = {
         );
     } else if (exists) {
     // Mettre votre commande ici
-    await console.log("La commande n'est pas terminée.");
+    const userId = interaction.user.id;
+    const toObject = true;
+    const user = await User.findOne({ memberId: userId }, null, {
+      lean: toObject,
+    });
+    const listTresor = user.tresorList;
+    var content = "";
+
+    for (let index = 0; index < listTresor.length; index++) {
+      const element = listTresor[index];
+      content += `- ${element}\n`;
     }
-    }
+
+    const embed = new MessageEmbed()
+      .setTitle(`Trésors de ${interaction.user.username}`)
+      .setDescription(content);
+    await interaction.reply({ embeds: [embed] });
+  }
+}
 }

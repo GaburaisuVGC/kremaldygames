@@ -70,7 +70,7 @@ module.exports = {
             );
             await User.updateOne(
               { memberId: user },
-              { $addToSet: { persosList: charaId } }
+              { $addToSet: { persosList: charaProfile.name } }
             );
             await Perso.updateOne(
               { _id: charaProfile._id },
@@ -118,11 +118,11 @@ module.exports = {
                 // const owner = ownerProfile.id;
                   await User.findOneAndUpdate(
                     { memberId: user },
-                    { amount: (buyerProfile.amount - buyAmount), $addToSet: { persosList: charaId } }
+                    { amount: (buyerProfile.amount - buyAmount), $addToSet: { persosList: charaProfile.name } }
                   );
                   await User.findOneAndUpdate(
                     { memberId: ownerProfile.memberId },
-                    { amount: (ownerProfile.amount += buyAmount), $pull: { persosList: charaId } }
+                    { amount: (ownerProfile.amount += buyAmount), $pull: { persosList: charaProfile.name } }
                   );
                   await Perso.updateOne(
                     { _id: charaProfile._id },

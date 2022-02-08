@@ -19,6 +19,7 @@
 
 
             function logArrayElements(element, index, array) {
+                
                 console.log("test[" + index + "] = " + element)                          
             }
             

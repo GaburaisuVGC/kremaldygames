@@ -7,7 +7,7 @@ TO-DO LIST
 ```
 ```diff
 
-- (EN DERNIER) Rendre le bot global. (Problème avec le handleCommands.js qui nécessite un GuildId, actuellement celui du serveur KremaldyGamestest. Quand le bot est mis sur un autre serveur, les commandes ne fonctionnent pas.)
++ (EN DERNIER) Rendre le bot global. (Problème avec le handleCommands.js qui nécessite un GuildId, actuellement celui du serveur KremaldyGamestest. Quand le bot est mis sur un autre serveur, les commandes ne fonctionnent pas.)
 + Balance :
 + Commandes :
 +   - balancetop
@@ -16,14 +16,12 @@ TO-DO LIST
 + Roll :
 + Equilibrage :
 +   - Equilibrer les probas de rareté
-! Trésor :
--   Commandes :
--       -view trésors (laisser le nombre de trésors dans /balance user)
--       -sell trésors <tresor.title> (donnent des freerolls)
++ Trésor :
++   Commandes :
++       -view trésors (laisser le nombre de trésors dans /balance user)
++       -sell trésors <tresor.title> (donnent des freerolls)
 +   BDD :
 +       -ajouter image (icone si possible)
--   Code :
--       -Gérer le fait d'avoir x fois le même trésor (le meilleur exemple : les Pokémon dans les rolls $p de Mudae)
 ! Personnages :
 +   BDD :
 +       -créer carte personnage (titre, image, valeur de base, unique: true, belongsToSomeone: Boolean, master: <member.id>)
@@ -35,7 +33,8 @@ TO-DO LIST
 +       -onsale <personnage.name>
 +       -setvalue (modifie la valeur du personnage, seulement possible par celui qui possède le perso)
 +       -view personnage <personnage.name>
--       -view personnages <user.username> (pour voir les personnages d'une personne)
++       -view personnages <user.username> (pour voir les personnages d'une personne)
+-       -marketplace (avec pagination, liste tous les personnages (avec leur valeur : prix de vente minimum) dont leur onSale === 1) 
 + Cartes:
 +   BDD/Code:
 +       -possibilité d'ajouter une image au Embed, possibilité qu'il n'y en ait pas si on met pas d'image dans la carte
