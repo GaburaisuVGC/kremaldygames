@@ -2,8 +2,10 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
-        console.log('Ready !');
 
-        client.user.setPresence({activities: [{name: `some games`, type: `PLAYING`}], status: 'online'});
+
+        console.log('Kremaldy Games est prêt.');
+
+        client.user.setPresence({activities: [{name: `some games to fill my Greed`, type: `PLAYING`}], status: 'online'});
     },
 };

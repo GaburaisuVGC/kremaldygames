@@ -1,19 +1,21 @@
-const Balance = require('../schemas/balance');
+const User = require('../schemas/user');
 const mongoose = require('mongoose');
 
 module.exports = (client) => {
-    client.createBalance = async (member) => {
-        let balanceProfile = await Balance.findOne({ memberId: member.id});
-        if (balanceProfile) {
-            return balanceProfile;
+    client.createUser = async (member) => {
+        let userProfile = await User.findOne({ memberId: member.id});
+        if (userProfile) {
+            return userProfile;
         } else {
-            balanceProfile = await new Balance({
+            userProfile = await new User({
                 _id: mongoose.Types.ObjectId(),
                 memberId: member.id,
                 tresor: 0,
+                freerolls: 0,
+                onCooldown: false
             });
-            await balanceProfile.save().catch(err => console.log(err));
-            return balanceProfile;
+            await userProfile.save().catch(err => console.log(err));
+            return userProfile;
         }
        
     };

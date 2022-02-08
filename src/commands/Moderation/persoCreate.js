@@ -1,24 +1,24 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { InteractionResponseType } = require("discord-api-types/v9");
 const { MessageEmbed, MessageAttachment } = require("discord.js");
-const Tresor = require("../../schemas/tresor");
+const Perso = require("../../schemas/perso");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("tresorcreate")
-    .setDescription("Crée un trésor."),
+    .setName("persocreate")
+    .setDescription("Crée un personnage."),
   async execute(interaction, client) {
-    if (interaction.user.id == "414311854614118401") {
-      const tresorProfile = await client.createTresor();
+     if (interaction.user.id == "414311854614118401") {
+      const persoProfile = await client.createPerso();
 
       const userEmbed = new MessageEmbed()
-        .setTitle(`Trésor créé`)
+        .setTitle(`Personnage créé`)
         .addFields({
-          name: `Création de Trésor`,
-          value: `Un trésor a été ajouté dans votre base de données.`,
+          name: `Création de Personnage`,
+          value: `Un personnage a été ajouté dans votre base de données.`,
         })
         .setTimestamp()
-        .setColor("BLUE")
+        .setColor("GREEN")
         .setFooter({
           text: interaction.user.tag,
           iconURL: interaction.user.displayAvatarURL(),

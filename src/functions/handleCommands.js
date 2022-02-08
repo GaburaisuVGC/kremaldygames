@@ -22,13 +22,14 @@ module.exports = (client) => {
 
     (async () => {
       try {
-        console.log("Started refreshing application (/) commands.");
+        console.log("Les commandes (/) se relancent...");
 
-        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        await rest.put(Routes.applicationCommands(clientId), {
           body: client.commandArray,
         });
 
-        console.log("Successfully reloaded application (/) commands.");
+
+        console.log("Les commandes (/) sont relancées.");
       } catch (error) {
         console.error(error);
       }

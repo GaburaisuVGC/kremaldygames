@@ -4,7 +4,7 @@ const tresorSchema = new mongoose.Schema({
     title: String,
     description: String,
     image: { type: String, required: false},
-    prix: Number,
+    rolls: Number,
 });
 
 module.exports = mongoose.model('Tresor', tresorSchema, 'tresors');
