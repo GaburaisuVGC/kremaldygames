@@ -141,7 +141,6 @@ module.exports = {
                 const persoCard = await Perso.findOne({ _id: rollProfile.hasPersonnage }, null, {lean: toObject});
                 if (persoCard.masterId == "") {
                     await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { masterId: userId, onSale: 0 });
-                    await User.updateOne({ memberId: userId }, { $inc: {perso: 1}});
                     await User.updateOne({ memberId: userId }, { $addToSet : { persosList: persoCard.name }});
                     const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
                     const userEmbedPerso = new MessageEmbed()
@@ -262,7 +261,6 @@ module.exports = {
                 const persoCard = await Perso.findOne({ _id: rollProfile.hasPersonnage }, null, {lean: toObject});
                 if (persoCard.masterId == "") {
                     await Perso.updateOne({ _id: rollProfile.hasPersonnage }, { masterId: userId, onSale: 0 });
-                    await User.updateOne({ memberId: userId }, { $inc: {perso: 1}});
                     await User.updateOne({ memberId: userId }, { $addToSet : { persosList: persoCard.name }});
                     const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
                     const userEmbedPerso = new MessageEmbed()

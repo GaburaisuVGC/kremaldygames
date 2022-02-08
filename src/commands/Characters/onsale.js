@@ -29,8 +29,6 @@ module.exports = {
         "Vous n'aviez pas de compte Kremaldy Games, nous vous en avons créé un. Veuillez réessayer votre commande."
       );
     } else if (exists) {
-      // Mettre votre commande ici
-
       const charaTarget = interaction.options.getString("character");
       let charaProfile = await Perso.findOne({ name: charaTarget });
       // Si le personnage n'existe pas

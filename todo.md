@@ -22,7 +22,7 @@ TO-DO LIST
 +       -sell trésors <tresor.title> (donnent des freerolls)
 +   BDD :
 +       -ajouter image (icone si possible)
-! Personnages :
++ Personnages :
 +   BDD :
 +       -créer carte personnage (titre, image, valeur de base, unique: true, belongsToSomeone: Boolean, master: <member.id>)
 +   Code :
@@ -34,7 +34,7 @@ TO-DO LIST
 +       -setvalue (modifie la valeur du personnage, seulement possible par celui qui possède le perso)
 +       -view personnage <personnage.name>
 +       -view personnages <user.username> (pour voir les personnages d'une personne)
--       -marketplace (avec pagination, liste tous les personnages (avec leur valeur : prix de vente minimum) dont leur onSale === 1) 
++       -marketplace (avec pagination, liste tous les personnages (avec leur valeur : prix de vente minimum) dont leur onSale === 1) 
 + Cartes:
 +   BDD/Code:
 +       -possibilité d'ajouter une image au Embed, possibilité qu'il n'y en ait pas si on met pas d'image dans la carte

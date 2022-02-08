@@ -27,7 +27,6 @@ module.exports = {
           "Vous n'aviez pas de compte Kremaldy Games, nous vous en avons créé un. Veuillez réessayer votre commande."
         );
     } else if (exists) {
-    // Mettre votre commande ici
     const userId = interaction.options.getUser("target")
       ? interaction.options.getUser("target")
       : interaction.user;

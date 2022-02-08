@@ -1,8 +1,6 @@
 # Kremaldy Games
 
-## Work in progress.
-
-(Treasure system is not finished yet.)
+Kremaldy Games est un bot vous permettant de collectionner et établir un commerce avec des personnages (créés selon les préférences des proches du développeur).
 
 ## About images (Very important)
 You have to add an "images" folder inside the "src" folder.

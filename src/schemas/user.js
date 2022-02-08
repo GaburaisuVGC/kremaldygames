@@ -4,12 +4,11 @@ const userSchema = new mongoose.Schema({
     memberId: String,
     amount: { type: Number, default: 1000 },
     tresor: Number,
-    tresorList : Array, // Ajouter un index avec le trésor
-    persos: Number,
+    tresorList : Array,
     persosList : Array,
     freerolls: Number,
     onCooldown: Boolean,
-     // Ajouter un index avec le perso
+
 });
 
 module.exports = mongoose.model('User', userSchema, 'users');

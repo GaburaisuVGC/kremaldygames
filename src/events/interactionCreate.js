@@ -11,7 +11,7 @@ module.exports = {
       } catch (error) {
         console.error(error);
         await interaction.reply({
-          content: "Une erreur est survenue. Oopsie ! Teehee !",
+          content: "Une erreur est survenue. Oopsie ! Teehee ! (Veuillez contacter PE | Gaburaisu#1970 au plus vite !)",
           ephemeral: true,
         });
       }

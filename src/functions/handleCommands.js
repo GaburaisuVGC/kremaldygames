@@ -24,13 +24,9 @@ module.exports = (client) => {
       try {
         console.log("Les commandes (/) se relancent...");
 
-        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        await rest.put(Routes.applicationCommands(clientId), {
           body: client.commandArray,
         });
-        // Pour rendre le bot global
-        // await rest.put(Routes.applicationCommands(clientId), {
-        //   body: client.commandArray,
-        // });
 
 
         console.log("Les commandes (/) sont relancées.");
