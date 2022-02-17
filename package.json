@@ -1,6 +1,6 @@
 {
   "name": "kremaldygames",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "On s'amuse avec un jeu Discord",
   "main": "./src/index.js",
   "author": "gaburaisu",

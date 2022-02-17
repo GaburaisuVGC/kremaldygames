@@ -8,11 +8,6 @@ module.exports = {
     .setName("changelog")
     .setDescription("Les dernières nouveautés du bot sont affichées ici."),
   async execute(interaction, client) {
-    const user = interaction.user.id;
-    // Dans chaque commande nécessitant le compte Kremaldy Games de celui ayant effectué la commande
-    // Si l'utilisateur n'existe pas, on l'empêche de faire la commande
-
-      await client.createUser(member);
       const userEmbed = new MessageEmbed()
         .setTitle(`Dernières nouveautés (0.7.1)`)
         .setThumbnail(
