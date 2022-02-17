@@ -11,9 +11,9 @@ module.exports = (client) => {
                 text: "Modifiez cette carte dans votre base de données.",
                 amount: -100,
                 image: "",
-                hasTresor: false,
                 hasPersonnage: "",
                 compensation: 0,
+                rolls: 0,
             });
             await cardProfile.save().catch(err => console.log(err));
             return cardProfile;

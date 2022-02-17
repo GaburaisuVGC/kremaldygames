@@ -12,7 +12,9 @@ module.exports = (client) => {
                 memberId: member.id,
                 tresor: 0,
                 freerolls: 0,
-                onCooldown: false
+                onCooldown: false,
+                gc: false,
+                amountGC: 0
             });
             await userProfile.save().catch(err => console.log(err));
             return userProfile;

@@ -21,9 +21,9 @@ module.exports = {
 
         const rarity = {
             "Commune" : "46",
-            "Peu Commune" : "32",
-            "Rare" : "14",
-            "ULTRA RARE" : "7",
+            "Peu Commune" : "35",
+            "Rare" : "16",
+            "ULTRA RARE" : "2",
             "LÉGENDAIRE" : "1"
         }
 
@@ -41,7 +41,12 @@ module.exports = {
         const userBalance = await User.findOne({ memberId: userId });
         const exists = await User.findOne({ memberId: userId});
         let member = interaction.guild.members.cache.get(userId);
-        if (exists) {
+        if (!exists) {
+            await client.createUser(member);
+            await interaction.reply(
+          "Vous n'aviez pas de compte Kremaldy Games, nous vous en avons créé un. Veuillez réessayer votre commande."
+        );
+    } else if (exists) {
 
         const userCoin = userBalance.amount;
         if (userBalance.freerolls < 1) {
@@ -65,7 +70,7 @@ module.exports = {
                 acc += parseFloat(rarity[key]);
             });
 
-            // console.log(percent + "%", result); // -- Proba executée
+            //console.log(percent + "%", result); // -- Proba executée
             
             const toObject = true;
             const card = await Card.find({ niveau: result }, null, {lean: toObject});
@@ -110,31 +115,33 @@ module.exports = {
                 await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.amount}});
             }
 
-            if (rollProfile.hasTresor != false) {
-                const tresorCard = await Tresor.find({}, null, {lean: toObject});
-                const tresorCount = await Tresor.count();
-                const randTresorID = Math.floor(Math.random() * tresorCount);
-                const userId = interaction.user.id;
-                const userTresor = await User.findOne({ memberId: userId });
-                const userTresorAmount = userTresor.tresor;
 
-                let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
-                if (userTresor.tresorList.includes(rollTresor.title)) {
-                    return;
-                    } else if (!userTresor.tresorList.includes(rollTresor.title)) {
-                        const imageTresor = new MessageAttachment(`./src/images/tresor/${rollTresor.image}.png`);
-                        const userEmbedTresor = new MessageEmbed()
-                            .setTitle("Vous avez trouvé un trésor !")
-                            .setColor("BLUE")
-                            .setFooter({text: rollTresor.title, 
-                                        iconURL: `attachment://${rollTresor.image}.png` 
-                                    });
-                            await interaction.followUp({ embeds: [userEmbedTresor], files: [imageTresor] });
-                            await interaction.editReply(userEmbedTresor);
-                        await User.updateOne({ memberId: userId }, { $inc: {tresor: 1}});
-                        await User.updateOne({ memberId: userId }, { $addToSet : { tresorList: rollTresor.title }});
-                        }
-                    }
+
+            // if (rollProfile.hasTresor != false) {
+            //     const tresorCard = await Tresor.find({}, null, {lean: toObject});
+            //     const tresorCount = await Tresor.count();
+            //     const randTresorID = Math.floor(Math.random() * tresorCount);
+            //     const userId = interaction.user.id;
+            //     const userTresor = await User.findOne({ memberId: userId });
+            //     const userTresorAmount = userTresor.tresor;
+
+            //     let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
+            //     if (userTresor.tresorList.includes(rollTresor.title)) {
+            //         return;
+            //         } else if (!userTresor.tresorList.includes(rollTresor.title)) {
+            //             const imageTresor = new MessageAttachment(`./src/images/tresor/${rollTresor.image}.png`);
+            //             const userEmbedTresor = new MessageEmbed()
+            //                 .setTitle("Vous avez trouvé un trésor !")
+            //                 .setColor("BLUE")
+            //                 .setFooter({text: rollTresor.title, 
+            //                             iconURL: `attachment://${rollTresor.image}.png` 
+            //                         });
+            //                 await interaction.followUp({ embeds: [userEmbedTresor], files: [imageTresor] });
+            //                 await interaction.editReply(userEmbedTresor);
+            //             await User.updateOne({ memberId: userId }, { $inc: {tresor: +1}});
+            //             await User.updateOne({ memberId: userId }, { $addToSet : { tresorList: rollTresor.title }});
+            //             }
+            //         }
 
             
             if (rollProfile.hasPersonnage != "") {
@@ -156,11 +163,28 @@ module.exports = {
                     if (rollProfile.compensation != 0) {
                         await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.compensation}});
                     }
-                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage ! Vous recevez une compensation de ${rollProfile.compensation}KC.`); // 
+                    const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
+                    const userEmbedPersoAP = new MessageEmbed()
+                    .setTitle(`Quelqu'un possède déjà ce personnage !`)
+                    .setDescription(`Vous recevez une compensation de ${rollProfile.compensation}KC.`)
+                    .setColor("LUMINOUS_VIVID_PINK")
+                    .setImage(`attachment://${persoCard.image}.png`)
+                    .addFields(
+                        {name: `${persoCard.name}`, value: `${persoCard.description}`, inline: true},
+                        { name: `Identifiant du maître`, value: `${persoCard.masterId}`},
+                    )
+                    await interaction.followUp({ embeds: [userEmbedPersoAP], files: [imagePerso] });
+                    await interaction.editReply(userEmbedPersoAP);
                     
                 }
             }
             await User.updateOne({ memberId: userId }, { onCooldown: true });
+
+            if (rollProfile.rolls != 0) {
+                await User.updateOne({ memberId: userId }, { $inc: {freerolls: rollProfile.rolls}});
+                const newUserBalance = await User.findOne({ memberId: userId });
+                await interaction.followUp(`Vous avez reçu ${rollProfile.rolls} freerolls ! Vous avez ${newUserBalance.freerolls} rolls.`)
+            } else if (rollProfile.rolls === 0) { return; }
             
         } 
                 
@@ -183,7 +207,7 @@ module.exports = {
                 acc += parseFloat(rarity[key]);
             });
 
-            // console.log(percent + "%", result); // -- Proba executée
+            //console.log(percent + "%", result); // -- Proba executée
             
             const toObject = true;
             const card = await Card.find({ niveau: result }, null, {lean: toObject});
@@ -229,31 +253,31 @@ module.exports = {
                 await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.amount}});
             }
 
-            if (rollProfile.hasTresor != false) {
-                const tresorCard = await Tresor.find({}, null, {lean: toObject});
-                const tresorCount = await Tresor.count();
-                const randTresorID = Math.floor(Math.random() * tresorCount);
-                const userId = interaction.user.id;
-                const userTresor = await User.findOne({ memberId: userId });
-                const userTresorAmount = userTresor.tresor;
+            // if (rollProfile.hasTresor != false) {
+            //     const tresorCard = await Tresor.find({}, null, {lean: toObject});
+            //     const tresorCount = await Tresor.count();
+            //     const randTresorID = Math.floor(Math.random() * tresorCount);
+            //     const userId = interaction.user.id;
+            //     const userTresor = await User.findOne({ memberId: userId });
+            //     const userTresorAmount = userTresor.tresor;
 
-                let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
-                if (userTresor.tresorList.includes(rollTresor.title)) {
-                    return;
-                    } else if (!userTresor.tresorList.includes(rollTresor.title)) {
-                        const imageTresor = new MessageAttachment(`./src/images/tresor/${rollTresor.image}.png`);
-                        const userEmbedTresor = new MessageEmbed()
-                            .setTitle("Vous avez trouvé un trésor !")
-                            .setColor("BLUE")
-                            .setFooter({text: rollTresor.title, 
-                                        iconURL: `attachment://${rollTresor.image}.png` 
-                                    });
-                            await interaction.followUp({ embeds: [userEmbedTresor], files: [imageTresor] });
-                            await interaction.editReply(userEmbedTresor);
-                        await User.updateOne({ memberId: userId }, { $inc: {tresor: 1}});
-                        await User.updateOne({ memberId: userId }, { $addToSet : { tresorList: rollTresor.title }});
-                        }
-                    }
+            //     let rollTresor = await Tresor.findOne({ _id: JSON.parse(JSON.stringify(tresorCard[`${randTresorID}`]._id))});
+            //     if (userTresor.tresorList.includes(rollTresor.title)) {
+            //         return;
+            //         } else if (!userTresor.tresorList.includes(rollTresor.title)) {
+            //             const imageTresor = new MessageAttachment(`./src/images/tresor/${rollTresor.image}.png`);
+            //             const userEmbedTresor = new MessageEmbed()
+            //                 .setTitle("Vous avez trouvé un trésor !")
+            //                 .setColor("BLUE")
+            //                 .setFooter({text: rollTresor.title, 
+            //                             iconURL: `attachment://${rollTresor.image}.png` 
+            //                         });
+            //                 await interaction.followUp({ embeds: [userEmbedTresor], files: [imageTresor] });
+            //                 await interaction.editReply(userEmbedTresor);
+            //             await User.updateOne({ memberId: userId }, { $inc: {tresor: +1}});
+            //             await User.updateOne({ memberId: userId }, { $addToSet : { tresorList: rollTresor.title }});
+            //             }
+            //         }
 
 
             
@@ -276,11 +300,28 @@ module.exports = {
                     if (rollProfile.compensation != 0) {
                         await User.updateOne({ memberId: userId }, { $inc: {amount: rollProfile.compensation}});
                     }
-                    await interaction.followUp(`<@${persoCard.masterId}> possède déjà ce personnage ! Vous recevez une compensation de ${rollProfile.compensation}KC.`); // 
+                    const imagePerso = new MessageAttachment(`./src/images/perso/${persoCard.image}.png`);
+                    const userEmbedPersoAP = new MessageEmbed()
+                    .setTitle(`Quelqu'un possède déjà ce personnage !`)
+                    .setDescription(`Vous recevez une compensation de ${rollProfile.compensation}KC.`)
+                    .setColor("LUMINOUS_VIVID_PINK")
+                    .setImage(`attachment://${persoCard.image}.png`)
+                    .addFields(
+                        {name: `${persoCard.name}`, value: `${persoCard.description}`, inline: true},
+                        { name: `Identifiant du maître`, value: `${persoCard.masterId}`},
+                    )
+                    await interaction.followUp({ embeds: [userEmbedPersoAP], files: [imagePerso] });
+                    await interaction.editReply(userEmbedPersoAP);
                     
                 }
             }
             await User.updateOne({ memberId: userId }, { freerolls: userBalance.freerolls - 1 });
+
+            if (rollProfile.rolls != 0) {
+                await User.updateOne({ memberId: userId }, { $inc: {freerolls: rollProfile.rolls}});
+                const newUserBalance = await User.findOne({ memberId: userId });
+                await interaction.followUp(`Vous avez reçu ${rollProfile.rolls} freerolls ! Vous avez ${newUserBalance.freerolls} rolls.`)
+            } else if (rollProfile.rolls === 0) { return; }
             
         } 
         }

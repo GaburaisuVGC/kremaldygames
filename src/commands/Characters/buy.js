@@ -41,7 +41,6 @@ module.exports = {
       const buyAmount = interaction.options.getInteger("amount");
       const charaTarget = interaction.options.getString("character");
       let charaProfile = await Perso.findOne({ name: charaTarget });
-      const charaId = stringify(charaProfile._id);
       // Si le personnage n'existe pas
       if (!charaProfile) {
         await interaction.reply(

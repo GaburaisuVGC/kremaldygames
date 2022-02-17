@@ -46,6 +46,11 @@ module.exports = {
             "Vous n'êtes pas le maître de ce personnage. Vous ne pouvez donc pas modifier sa valeur."
           );
         } else if (charaProfile.masterId == user) {
+          if (valueAmount <= 0) {
+            await interaction.reply(
+              "La valeur ne doit pas être inférieure ou égale à 0."
+            );
+          } else if (valueAmount > 0) {
           await Perso.updateOne(
             { _id: charaProfile._id },
             { value: valueAmount }
@@ -67,5 +72,6 @@ module.exports = {
         }
       }
     }
+  }
   },
 };
