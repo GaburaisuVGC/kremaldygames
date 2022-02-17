@@ -9,7 +9,7 @@ module.exports = {
     .setDescription("Les dernières nouveautés du bot sont affichées ici."),
   async execute(interaction, client) {
       const userEmbed = new MessageEmbed()
-        .setTitle(`Dernières nouveautés (0.7.1)`)
+        .setTitle(`Dernières nouveautés (0.7.3)`)
         .setThumbnail(
           `https://cdn.discordapp.com/avatars/937797776748724284/6a22725d6655af54719373ba6f28ae14.png?size=256`
         )
