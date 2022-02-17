@@ -9,6 +9,7 @@ const cardSchema = new mongoose.Schema({
     hasTresor: Boolean,
     hasPersonnage: String,
     compensation: Number,
+    rolls: Number,
 });
 
 module.exports = mongoose.model('Card', cardSchema, 'cards');

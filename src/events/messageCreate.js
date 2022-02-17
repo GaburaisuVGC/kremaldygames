@@ -4,7 +4,7 @@ module.exports = {
   name: "messageCreate",
   async execute(message, client) {
     const userProfile = await client.createUser(message.member);
-    const amount = Math.floor(Math.random() * 2) + 1;
+    const amount = Math.floor(Math.random() * 29) + 1;
     if (message.member.id != "937797776748724284") {
       try {
         await User.findOneAndUpdate(

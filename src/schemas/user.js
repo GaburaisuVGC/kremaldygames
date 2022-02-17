@@ -4,10 +4,11 @@ const userSchema = new mongoose.Schema({
     memberId: String,
     amount: { type: Number, default: 1000 },
     tresor: Number,
-    tresorList : Array,
     persosList : Array,
     freerolls: Number,
     onCooldown: Boolean,
+    gc: Boolean,
+    amountGC: mongoose.Schema.Types.Decimal128,
 
 });
 
